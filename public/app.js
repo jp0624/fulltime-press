@@ -1,3 +1,5 @@
+import { archive } from './archive.js';
+
 const stories = [
   ['above-the-rim', 'Basketball', 'Above the rim', 'hero', 'A player reaching for a dunk', 'The split second between takeoff and touchdown, and everything it takes to get there.', [
     'A dunk begins low to the floor. The penultimate step is often the longest one, giving the player room to lower their hips while carrying speed into the plant. By the time the crowd looks up, most of the decision has been made.',
@@ -36,17 +38,28 @@ const stories = [
   ]]
 ].map(([id, sport, title, image, alt, dek, body]) => ({id, sport, title, image, alt, dek, body}));
 
+const categories = [...new Set(stories.map(story => story.sport))];
+const queues = categories.map(sport => archive.filter(story => story.sport === sport));
+while (queues.some(queue => queue.length)) {
+  for (const queue of queues) {
+    if (queue.length) stories.push(queue.shift());
+  }
+}
+
 const filters = document.querySelector('#filters');
 const grid = document.querySelector('#story-grid');
 const results = document.querySelector('#results-count');
 const reader = document.querySelector('#reader');
 const article = document.querySelector('#article');
 const closeReader = document.querySelector('#close-reader');
+const more = document.querySelector('#more-stories');
+const pageSize = 12;
+let activeSport = 'All';
+let visibleCount = pageSize;
 let returnHash = '';
 let trigger;
 
-const categories = ['All', ...new Set(stories.map(story => story.sport))];
-for (const sport of categories) {
+for (const sport of ['All', ...categories]) {
   const button = document.createElement('button');
   button.type = 'button';
   button.dataset.filter = sport;
@@ -54,22 +67,27 @@ for (const sport of categories) {
   filters.append(button);
 }
 
-function renderGrid(sport) {
-  const matches = stories.filter(story => sport === 'All' ? story.id !== 'above-the-rim' : story.sport === sport);
+function renderGrid({ append = false } = {}) {
+  const matches = stories.filter(story => activeSport === 'All' ? story.id !== 'above-the-rim' : story.sport === activeSport);
+  const start = append ? grid.children.length : 0;
+  if (!append) grid.replaceChildren();
+  const shown = Math.min(visibleCount, matches.length);
   for (const button of filters.children) {
-    button.setAttribute('aria-pressed', String(button.dataset.filter === sport));
+    button.setAttribute('aria-pressed', String(button.dataset.filter === activeSport));
   }
-  grid.innerHTML = matches.map(story => `
+  grid.insertAdjacentHTML('beforeend', matches.slice(start, shown).map(story => `
     <a class="card" href="#story/${story.id}" data-story="${story.id}">
       <div class="card-photo"><img src="/images/${story.image}.webp" alt="" loading="lazy"></div>
       <div class="card-info">
-        <p class="card-meta">${story.sport}</p>
+        <p class="card-meta">${story.sport}${story.format ? ` / ${story.format}` : ''}</p>
         <h3>${story.title}</h3>
         <p class="card-dek">${story.dek}</p>
       </div>
     </a>
-  `).join('');
-  results.textContent = `${matches.length} ${matches.length === 1 ? 'story' : 'stories'} shown`;
+  `).join(''));
+  results.textContent = `Showing ${shown} of ${matches.length} stories`;
+  if (append) grid.children[start]?.focus();
+  more.hidden = shown >= matches.length;
 }
 
 function syncReader() {
@@ -81,10 +99,14 @@ function syncReader() {
   }
 
   article.innerHTML = `
-    <img src="/images/${story.image}.webp" alt="${story.alt}">
+    <header class="article-hero article-hero--${story.image}">
+      <img src="/images/${story.image}.webp" alt="${story.alt}">
+      <div class="article-heading">
+        <p class="card-meta">${story.sport} / ${story.format ?? 'Feature'}</p>
+        <h2 id="article-title">${story.title}</h2>
+      </div>
+    </header>
     <div class="article-copy">
-      <p class="card-meta">${story.sport}</p>
-      <h2 id="article-title">${story.title}</h2>
       <p class="article-dek">${story.dek}</p>
       ${story.body.map(paragraph => `<p>${paragraph}</p>`).join('')}
     </div>
@@ -96,7 +118,11 @@ function syncReader() {
 
 document.addEventListener('click', event => {
   const filter = event.target.closest('[data-filter]');
-  if (filter) renderGrid(filter.dataset.filter);
+  if (filter) {
+    activeSport = filter.dataset.filter;
+    visibleCount = pageSize;
+    renderGrid();
+  }
 
   const link = event.target.closest('[data-story]');
   if (link && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
@@ -105,7 +131,18 @@ document.addEventListener('click', event => {
   }
 });
 
+more.addEventListener('click', () => {
+  visibleCount += pageSize;
+  renderGrid({append: true});
+});
+
 closeReader.addEventListener('click', () => reader.close());
+reader.addEventListener('click', event => {
+  if (event.target !== reader) return;
+  const bounds = reader.getBoundingClientRect();
+  if (event.clientX < bounds.left || event.clientX > bounds.right ||
+      event.clientY < bounds.top || event.clientY > bounds.bottom) reader.close();
+});
 reader.addEventListener('close', () => {
   if (location.hash.startsWith('#story/')) {
     history.replaceState(null, '', returnHash || location.pathname + location.search);
@@ -115,5 +152,5 @@ reader.addEventListener('close', () => {
   returnHash = '';
 });
 window.addEventListener('hashchange', syncReader);
-renderGrid('All');
+renderGrid();
 syncReader();
