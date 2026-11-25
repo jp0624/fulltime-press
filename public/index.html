@@ -21,7 +21,9 @@
   </div>
 </header>
 <main id="main">
-  <section class="hero" aria-labelledby="hero-title">
+  <section class="hero" aria-label="Featured sports stories" aria-roledescription="carousel">
+    <div class="hero-stage">
+    <div class="hero-slide is-active" role="group" aria-roledescription="slide" aria-label="Above the rim">
     <img src="/images/hero.webp" alt="A basketball player rising toward the hoop in a dark arena" fetchpriority="high">
     <div class="wrap hero-inner">
       <div class="hero-copy">
@@ -31,7 +33,17 @@
         <a class="primary" href="#story/above-the-rim" data-story="above-the-rim">Read the cover story</a>
       </div>
     </div>
-    <div class="photo-label">01 / BASKETBALL</div>
+    </div>
+    </div>
+    <div class="wrap hero-controls" hidden>
+      <div class="hero-dots" role="group" aria-label="Choose a featured story"></div>
+      <div class="hero-buttons">
+        <button type="button" data-carousel="play">Pause</button>
+        <button type="button" data-carousel="prev" aria-label="Previous featured story">‹</button>
+        <button type="button" data-carousel="next" aria-label="Next featured story">›</button>
+      </div>
+    </div>
+    <p class="sr-only hero-status" aria-live="polite"></p>
   </section>
   <section class="stories wrap" id="stories" aria-labelledby="stories-title">
     <div class="section-head"><div><p class="kicker"><span></span> THE FIRST EDITION</p><h2 id="stories-title">THE FIELD</h2></div><span class="issue">FULLTIME PRESS / VOL. 01</span></div>

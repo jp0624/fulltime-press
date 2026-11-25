@@ -1,4 +1,5 @@
 import { archive } from './archive.js';
+import { initHero } from './hero.js';
 
 const stories = [
   ['above-the-rim', 'Basketball', 'Above the rim', 'hero', 'A player reaching for a dunk', 'The split second between takeoff and touchdown, and everything it takes to get there.', [
@@ -37,6 +38,8 @@ const stories = [
     'Watch the receiver’s feet at the top of the route. Then look back at the pocket. A good throw often begins just as the receiver makes the move that opens the window.'
   ]]
 ].map(([id, sport, title, image, alt, dek, body]) => ({id, sport, title, image, alt, dek, body}));
+
+initHero(stories.slice(0, 7).filter(story => story.id !== 'space-between'));
 
 const categories = [...new Set(stories.map(story => story.sport))];
 const queues = categories.map(sport => archive.filter(story => story.sport === sport));
@@ -99,7 +102,7 @@ function syncReader() {
   }
 
   article.innerHTML = `
-    <header class="article-hero article-hero--${story.image}">
+    <header class="article-hero${story.image === 'hero' ? ' article-hero--hero' : ''}">
       <img src="/images/${story.image}.webp" alt="${story.alt}">
       <div class="article-heading">
         <p class="card-meta">${story.sport} / ${story.format ?? 'Feature'}</p>

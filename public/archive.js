@@ -76,18 +76,16 @@ const features = [
   ['Football', 'The two-minute sideline', 'When a few seconds change the value of a catch.', 'Receivers near the boundary can gain yards and stop the clock by getting out cleanly. Defenders may guard those lanes and concede shorter throws over the middle to keep the clock running.']
 ];
 
-const sportImages = {
-  Basketball: 'court', Hockey: 'hockey', Soccer: 'soccer',
-  Motorsport: 'motorsport', Tennis: 'tennis', Football: 'football'
-};
-
-export const archive = features.map(([sport, title, dek, notes]) => ({
-  id: title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, ''),
-  sport,
-  title,
-  dek,
-  image: sportImages[sport],
-  alt: '',
-  body: [notes],
-  format: 'Field note'
-}));
+export const archive = features.map(([sport, title, dek, notes]) => {
+  const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
+  return {
+    id,
+    sport,
+    title,
+    dek,
+    image: `stories/${id}`,
+    alt: '',
+    body: [notes],
+    format: 'Field note'
+  };
+});
