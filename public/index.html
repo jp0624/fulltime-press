@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Fulltime Press is an independent sports magazine about the craft, culture and people behind the game.">
+<meta name="theme-color" content="#101213">
+<title>Fulltime Press — Independent Sports Magazine</title>
+<link rel="stylesheet" href="/style.css">
+<script type="module" src="/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="mast">
+  <div class="wrap mast-inner">
+    <a class="brand" href="/" aria-label="Fulltime Press home"><span class="mark" aria-hidden="true">F<span>↗</span></span>FULLTIME<span class="brand-accent">PRESS</span></a>
+    <nav aria-label="Sports" class="main-nav">
+      <a href="#stories" data-filter="Basketball">Basketball</a><a href="#stories" data-filter="Hockey">Hockey</a><a href="#stories" data-filter="Soccer">Soccer</a><a href="#stories" data-filter="Motorsport">Motorsport</a>
+    </nav>
+    <a class="edition" href="#stories" data-filter="All">THE EDITION</a>
+  </div>
+</header>
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <img src="/images/hero.webp" alt="A basketball player rising toward the hoop in a dark arena" fetchpriority="high">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="kicker"><span></span> THE COVER STORY</p>
+        <h1 id="hero-title">ABOVE<br>THE <em>RIM.</em></h1>
+        <p class="hero-dek">The split second between takeoff and touchdown, and everything it takes to get there.</p>
+        <a class="primary" href="#story/above-the-rim" data-story="above-the-rim">Read the cover story</a>
+      </div>
+    </div>
+    <div class="photo-label">01 / BASKETBALL</div>
+  </section>
+  <section class="stories wrap" id="stories" aria-labelledby="stories-title">
+    <div class="section-head"><div><p class="kicker"><span></span> THE FIRST EDITION</p><h2 id="stories-title">THE FIELD</h2></div><span class="issue">FULLTIME PRESS / VOL. 01</span></div>
+    <div id="filters" class="filters" role="group" aria-label="Filter stories by sport"></div>
+    <p id="results-count" class="sr-only" aria-live="polite"></p>
+    <div id="story-grid" class="grid"></div>
+  </section>
+</main>
+<footer><div class="wrap foot"><a class="brand" href="/"><span class="mark" aria-hidden="true">F<span>↗</span></span>FULLTIME<span class="brand-accent">PRESS</span></a><p>Independent sports magazine</p><a href="#main">Back to top ↑</a></div></footer>
+<dialog id="reader" aria-labelledby="article-title"><div class="reader-bar"><span>FULLTIME PRESS</span><button type="button" id="close-reader">Close <span aria-hidden="true">×</span></button></div><article id="article"></article></dialog>
+</body>
+</html>
