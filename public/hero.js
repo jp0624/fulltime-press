@@ -1,3 +1,10 @@
+const featureBackdrops = new Map([
+  ['edges-of-the-game', 'hero-hockey'],
+  ['around-the-wall', 'hero-soccer'],
+  ['four-shots', 'hero-tennis'],
+  ['window-downfield', 'hero-football']
+]);
+
 export function initHero(featured) {
   const hero = document.querySelector('.hero');
   const stage = hero.querySelector('.hero-stage');
@@ -17,13 +24,15 @@ export function initHero(featured) {
   featured.forEach((story, index) => {
     if (index) {
       const slide = document.createElement('div');
+      const backdrop = featureBackdrops.get(story.id);
       slide.className = 'hero-slide hero-slide--feature';
+      if (backdrop) slide.classList.add('hero-slide--right-framed');
       slide.setAttribute('role', 'group');
       slide.setAttribute('aria-roledescription', 'slide');
       slide.setAttribute('aria-label', story.title);
       slide.inert = true;
       slide.innerHTML = `
-        <img src="/images/${story.image}.webp" alt="" decoding="async">
+        <img src="/images/${backdrop ?? story.image}.webp" alt="" decoding="async">
         <div class="wrap hero-inner">
           <div class="hero-copy">
             <p class="kicker"><span></span> FEATURED / ${story.sport.toUpperCase()}</p>
