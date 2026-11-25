@@ -47,6 +47,13 @@
   </section>
   <section class="stories wrap" id="stories" aria-labelledby="stories-title">
     <div class="section-head"><div><p class="kicker"><span></span> THE FIRST EDITION</p><h2 id="stories-title">THE FIELD</h2></div><span class="issue">FULLTIME PRESS / VOL. 01</span></div>
+    <form class="story-search" role="search" aria-label="Story archive">
+      <label for="story-search">Search stories</label>
+      <div class="story-search-controls">
+        <input id="story-search" type="search" placeholder="Try power play or serve and volley" aria-controls="story-grid" autocomplete="off">
+        <button type="button" id="clear-search" hidden>Clear search</button>
+      </div>
+    </form>
     <div id="filters" class="filters" role="group" aria-label="Filter stories by sport"></div>
     <p id="results-count" class="results-count" aria-live="polite"></p>
     <div id="story-grid" class="grid"></div>

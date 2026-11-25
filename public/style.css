@@ -57,6 +57,13 @@ h1 em{color:var(--lime);font-style:normal}
 .section-head .kicker{margin-bottom:8px}
 .section-head h2{font-size:clamp(46px,6vw,78px);line-height:.97;letter-spacing:-.03em}
 .issue{font-size:11px;font-weight:800;letter-spacing:.13em;color:var(--muted)}
+.story-search{display:grid;gap:8px;margin-top:22px;max-width:540px}
+.story-search label{font-size:14px;font-weight:750}
+.story-search-controls{display:flex;flex-wrap:wrap;gap:8px}
+.story-search input{flex:1 1 230px;min-width:0;background:#191b1c;color:var(--paper);border:1px solid var(--line);border-radius:0;padding:10px 12px;font:inherit}
+.story-search input:focus-visible{outline:2px solid var(--lime);outline-offset:2px}
+.story-search button{background:transparent;color:var(--paper);border:1px solid var(--line);padding:8px 12px;font:inherit;cursor:pointer}
+.story-search button:hover{border-color:var(--lime);color:var(--lime)}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin-block:19px 23px}
 .filters button{border:1px solid var(--line);background:transparent;color:var(--paper);padding:8px 13px;cursor:pointer;font-size:13px;font-weight:750}
 .filters button:hover{border-color:var(--lime)}

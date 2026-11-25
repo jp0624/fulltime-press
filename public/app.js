@@ -49,6 +49,15 @@ while (queues.some(queue => queue.length)) {
   }
 }
 
+function searchWords(value) {
+  return value.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
+}
+
+const searchIndex = new Map(stories.map(story => [
+  story.id, searchWords([story.title, story.sport, story.dek, ...story.body].join(' ')).join(' ')
+]));
+const search = document.querySelector('#story-search');
+const clearSearch = document.querySelector('#clear-search');
 const filters = document.querySelector('#filters');
 const grid = document.querySelector('#story-grid');
 const results = document.querySelector('#results-count');
@@ -71,7 +80,12 @@ for (const sport of ['All', ...categories]) {
 }
 
 function renderGrid({ append = false } = {}) {
-  const matches = stories.filter(story => activeSport === 'All' ? story.id !== 'above-the-rim' : story.sport === activeSport);
+  const words = searchWords(search.value);
+  const matches = stories.filter(story => {
+    if (activeSport !== 'All' && story.sport !== activeSport) return false;
+    if (words.length) return words.every(word => searchIndex.get(story.id).includes(word));
+    return activeSport !== 'All' || story.id !== 'above-the-rim';
+  });
   const start = append ? grid.children.length : 0;
   if (!append) grid.replaceChildren();
   const shown = Math.min(visibleCount, matches.length);
@@ -88,7 +102,10 @@ function renderGrid({ append = false } = {}) {
       </div>
     </a>
   `).join(''));
-  results.textContent = `Showing ${shown} of ${matches.length} stories`;
+  results.textContent = matches.length
+    ? `Showing ${shown} of ${matches.length} ${matches.length === 1 ? 'story' : 'stories'}`
+    : 'No stories found. Try a different search or sport.';
+  clearSearch.hidden = !search.value;
   if (append) grid.children[start]?.focus();
   more.hidden = shown >= matches.length;
 }
@@ -132,6 +149,18 @@ document.addEventListener('click', event => {
     returnHash = location.hash;
     trigger = link;
   }
+});
+
+search.form.addEventListener('submit', event => event.preventDefault());
+search.addEventListener('input', () => {
+  visibleCount = pageSize;
+  renderGrid();
+});
+clearSearch.addEventListener('click', () => {
+  search.value = '';
+  visibleCount = pageSize;
+  renderGrid();
+  search.focus();
 });
 
 more.addEventListener('click', () => {
