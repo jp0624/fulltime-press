@@ -12,6 +12,7 @@ export function initHero(featured) {
   let paused = motion.matches;
   let timer;
   let touchStart;
+  let depthFrame = 0;
 
   featured.forEach((story, index) => {
     if (index) {
@@ -43,6 +44,19 @@ export function initHero(featured) {
     dots.append(button);
     indicators.push(button);
   });
+
+  function updateDepth() {
+    depthFrame = 0;
+    const {top, height, bottom} = hero.getBoundingClientRect();
+    if (bottom <= 0) return;
+    const displacement = motion.matches ? 0 : Math.min(Math.max(-top, 0), height);
+    hero.style.setProperty('--hero-depth', `${displacement * .085}px`);
+    hero.style.setProperty('--hero-foreground', `${displacement * -.04}px`);
+  }
+
+  function queueDepthUpdate() {
+    if (!depthFrame) depthFrame = requestAnimationFrame(updateDepth);
+  }
 
   function resetTimer() {
     clearInterval(timer);
@@ -80,7 +94,13 @@ export function initHero(featured) {
   controls.querySelector('[data-carousel="prev"]').addEventListener('click', () => moveTo(current - 1, true));
   controls.querySelector('[data-carousel="next"]').addEventListener('click', () => moveTo(current + 1, true));
   play.addEventListener('click', () => setPaused(!paused));
-  motion.addEventListener('change', event => setPaused(event.matches));
+  motion.addEventListener('change', event => {
+    setPaused(event.matches);
+    queueDepthUpdate();
+  });
+  window.addEventListener('scroll', queueDepthUpdate, {passive: true});
+  window.addEventListener('resize', queueDepthUpdate);
+  queueDepthUpdate();
   hero.addEventListener('keydown', event => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
