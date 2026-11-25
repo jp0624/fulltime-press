@@ -1,6 +1,7 @@
 const featureBackdrops = new Map([
   ['edges-of-the-game', 'hero-hockey'],
   ['around-the-wall', 'hero-soccer'],
+  ['the-wet-line', 'hero-motorsport'],
   ['four-shots', 'hero-tennis'],
   ['window-downfield', 'hero-football']
 ]);
