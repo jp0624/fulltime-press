@@ -1,3 +1,4 @@
+import { thirdEdition } from './archive-third-edition.js';
 import { secondEdition } from './archive-second-edition.js';
 
 const features = [
@@ -78,7 +79,7 @@ const features = [
   ['Football', 'The two-minute sideline', 'When a few seconds change the value of a catch.', 'Receivers near the boundary can gain yards and stop the clock by getting out cleanly. Defenders may guard those lanes and concede shorter throws over the middle to keep the clock running.']
 ];
 
-export const archive = [...secondEdition, ...features].map(([sport, title, dek, notes]) => {
+export const archive = [...thirdEdition, ...secondEdition, ...features].map(([sport, title, dek, notes]) => {
   const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
   return {
     id,
