@@ -1,3 +1,5 @@
+import { secondEdition } from './archive-second-edition.js';
+
 const features = [
   ['Basketball', 'The extra pass', 'Why the best shot can be one pass away.', 'When a defender closes out hard, passing again can turn a rushed shot into an open one. Follow the weak-side corner on the replay. Its defender usually has the longest recovery.'],
   ['Basketball', 'Screen and slip', 'A screen can work before contact.', 'A screener who sees both defenders step toward the ball can cut to the rim early. The key is leaving late enough that the defence has already committed to the coverage.'],
@@ -76,7 +78,7 @@ const features = [
   ['Football', 'The two-minute sideline', 'When a few seconds change the value of a catch.', 'Receivers near the boundary can gain yards and stop the clock by getting out cleanly. Defenders may guard those lanes and concede shorter throws over the middle to keep the clock running.']
 ];
 
-export const archive = features.map(([sport, title, dek, notes]) => {
+export const archive = [...secondEdition, ...features].map(([sport, title, dek, notes]) => {
   const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
   return {
     id,
